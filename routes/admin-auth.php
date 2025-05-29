@@ -43,4 +43,5 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::post('/admin/services/update-materials', [ServiceController::class, 'updateMaterials'])->name('services.updateMaterials');
     Route::post('/admin/services/update-time-slots', [ServiceController::class, 'updateTimeSlots'])->name('services.updateTimeSlots');
     Route::post('/admin/services/{id}/toggle-availability', [ServiceController::class, 'toggleAvailability'])->name('services.toggleAvailability');
+    Route::post('/admin/services/{id}/update-material-prices', [ServiceController::class, 'updateMaterialPrices'])->name('services.updateMaterialPrices');
 });

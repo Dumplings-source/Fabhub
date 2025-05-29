@@ -143,4 +143,31 @@ class ServiceController extends Controller
 
         return redirect()->back()->with('success', 'Service availability updated successfully');
     }
+
+    public function updateMaterialPrices(Request $request, $id)
+    {
+        if (!Auth::guard('admin')->check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $service = Service::findOrFail($id);
+        
+        $validated = $request->validate([
+            'material_prices' => 'required|array',
+            'material_prices.*' => 'required|numeric|min:0',
+        ]);
+        
+        // Clear existing material prices for this service
+        $service->materialPrices()->delete();
+        
+        // Create new material prices
+        foreach ($validated['material_prices'] as $materialName => $price) {
+            $service->materialPrices()->create([
+                'material_name' => $materialName,
+                'price' => $price,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Material prices updated successfully');
+    }
 }

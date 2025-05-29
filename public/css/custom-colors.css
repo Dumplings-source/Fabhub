@@ -1,0 +1,229 @@
+/* Custom Color Palette */
+:root {
+    /* Primary Colors */
+    --primary-dark: #001740;     /* Dark blue #001740 */
+    --primary-light: #F4D462;    /* Yellow #F4D462 */
+    
+    /* Secondary Colors */
+    --secondary-accent: #0F2A71; /* Navy blue #0F2A71 */
+    --secondary-yellow: #F5C400; /* Bright yellow #F5C400 */
+    --secondary-light: #FFFDF0;  /* Off-white #FFFDF0 */
+    
+    /* Text Colors */
+    --text-dark: #001740;
+    --text-light: #FFFDF0;
+    --text-muted: #6c757d;
+    
+    /* Status Colors */
+    --status-pending: var(--primary-light);
+    --status-processing: var(--secondary-yellow);
+    --status-completed: var(--secondary-accent);
+    --status-cancelled: #dc3545;
+}
+
+/* Background Colors */
+.bg-primary {
+    background-color: var(--primary-dark) !important;
+}
+
+.bg-primary-light {
+    background-color: var(--primary-light) !important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary-accent) !important;
+}
+
+.bg-secondary-yellow {
+    background-color: var(--secondary-yellow) !important;
+}
+
+.bg-secondary-light {
+    background-color: var(--secondary-light) !important;
+}
+
+/* Text Colors */
+.text-primary {
+    color: var(--primary-dark) !important;
+}
+
+.text-primary-light {
+    color: var(--primary-light) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-accent) !important;
+}
+
+.text-secondary-yellow {
+    color: var(--secondary-yellow) !important;
+}
+
+.text-secondary-light {
+    color: var(--secondary-light) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-accent) !important;
+    border-color: var(--secondary-accent) !important;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-accent) !important;
+    border-color: var(--secondary-accent) !important;
+    color: var(--text-light) !important;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+
+/* Service Request Buttons */
+.btn-request {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-request-primary {
+    background-color: var(--primary-dark);
+    color: var(--secondary-light);
+    border: none;
+}
+
+.btn-request-primary:hover {
+    background-color: var(--secondary-accent);
+}
+
+.btn-request-secondary {
+    background-color: var(--secondary-accent);
+    color: var(--secondary-light);
+    border: none;
+}
+
+.btn-request-secondary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-request-yellow {
+    background-color: var(--secondary-yellow);
+    color: var(--primary-dark);
+    border: none;
+}
+
+.btn-request-yellow:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-request-unavailable {
+    background-color: #6c757d;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Cards */
+.card {
+    border-color: rgba(0, 23, 64, 0.125) !important;
+}
+
+.card-header {
+    background-color: rgba(0, 23, 64, 0.03) !important;
+}
+
+/* Status Badges */
+.status-badge-pending {
+    background-color: var(--primary-light) !important;
+    color: var(--text-dark) !important;
+}
+
+.status-badge-processing {
+    background-color: var(--secondary-yellow) !important;
+    color: var(--text-dark) !important;
+}
+
+.status-badge-completed {
+    background-color: var(--secondary-accent) !important;
+    color: var(--text-light) !important;
+}
+
+.status-badge-cancelled {
+    background-color: #dc3545 !important;
+    color: var(--text-light) !important;
+}
+
+/* Navigation */
+.nav-link.active {
+    color: var(--primary-light) !important;
+}
+
+.nav-link:not(.active) {
+    color: var(--secondary-light) !important;
+}
+
+.nav-link:hover:not(.active) {
+    color: var(--primary-light) !important;
+}
+
+/* Dashboard Stat Cards */
+.stat-card-primary {
+    background-color: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+
+.stat-card-secondary {
+    background-color: var(--secondary-accent) !important;
+    color: var(--text-light) !important;
+}
+
+.stat-card-yellow {
+    background-color: var(--primary-light) !important;
+    color: var(--text-dark) !important;
+}
+
+.stat-card-bright-yellow {
+    background-color: var(--secondary-yellow) !important;
+    color: var(--text-dark) !important;
+}
+
+/* Tables */
+.table-header {
+    background-color: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+
+.table-row-alt {
+    background-color: rgba(244, 212, 98, 0.1) !important;
+}
+
+/* Custom Shadows */
+.custom-shadow {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 23, 64, 0.075) !important;
+}
+
+.custom-shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 23, 64, 0.175) !important;
+} 

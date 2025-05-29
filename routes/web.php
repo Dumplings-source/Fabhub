@@ -5,9 +5,28 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminUserController as Enter;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\Api\OrderController as ApiOrderController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// API Routes
+Route::prefix('api')->group(function () {
+    Route::get('/orders', [CustomerDashboardController::class, 'getOrders']);
+    Route::get('/order-counts', [CustomerDashboardController::class, 'getOrderCounts']);
+    Route::get('/services', [CustomerDashboardController::class, 'getServices']);
+    Route::get('/services/{id}', [CustomerDashboardController::class, 'getService']);
+    Route::post('/orders', [CustomerDashboardController::class, 'createOrderApi']);
+    Route::post('/orders/{id}/cancel', [CustomerDashboardController::class, 'cancelOrder']);
+    Route::get('/reservations', [CustomerDashboardController::class, 'getReservations']);
+    Route::post('/reservations', [CustomerDashboardController::class, 'createReservation']);
+    Route::post('/reservations/{id}/cancel', [CustomerDashboardController::class, 'cancelReservation']);
+    Route::get('/notifications', [CustomerDashboardController::class, 'getNotifications']);
+    Route::post('/profile', [CustomerDashboardController::class, 'updateProfile']);
+    
+    // New API controller routes
+    Route::get('/orders/counts', [ApiOrderController::class, 'getCounts']);
 });
 
 Route::middleware('auth')->group(function () {
