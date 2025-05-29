@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminUserController as Enter;
+use App\Http\Controllers\CustomerDashboardController;
+use App\Http\Controllers\AdminOrderController;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/users', [Enter::class, 'showUserManagement'])->name('admin.users');
+    Route::get('/dashboard', [Enter::class, 'showDashboard'])->name('dashboard');
+    Route::get('/service-catalog', [CustomerDashboardController::class, 'showServiceCatalog'])->name('service-catalog');
+    Route::post('/service-catalog/{service}/order', [CustomerDashboardController::class, 'createOrder'])->name('service-catalog.order');
+    Route::post('/admin/users', [Enter::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users/{user}/edit', [Enter::class, 'edit'])->name('admin.users.edit');
+    Route::put('/admin/users/{user}', [Enter::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', [Enter::class, 'destroy'])->name('admin.users.delete');
+    
+    // Customer Recent Orders
+    Route::get('/recent-orders', [CustomerDashboardController::class, 'showRecentOrders'])->name('recent-orders');
+    
+    // Admin Order Management
+    Route::get('/admin/orders', function () {
+        return view('admin.order-management');
+    })->middleware('auth:admin')->name('admin.orders');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+require __DIR__.'/admin-auth.php';
