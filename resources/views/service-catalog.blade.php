@@ -2,6 +2,17 @@
     <div class="container py-4">
         <!-- Custom CSS to fix input text visibility in service request forms -->
         <style>
+            /* Add backdrop filter to modals */
+            .modal {
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+            
+            .modal-backdrop {
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+            
             /* Fix text color in input fields */
             .modal input[type="text"],
             .modal input[type="email"],
@@ -164,7 +175,7 @@
                             <div class="row g-4">
                                 @foreach ($services as $service)
                                     <div class="col-md-6 col-lg-4">
-                                        <div class="card h-100 bg-light shadow service-card">
+                                        <div class="card h-100 bg-light shadow service-card" data-service-id="{{ $service->id }}">
                                             <div class="card-body p-4">
                                                 <h3 class="card-title h5 text-primary fw-bold mb-3">{{ $service->name }}</h3>
                                                 
@@ -349,7 +360,7 @@
                                             <label for="quantity-{{ $service->id }}" class="form-label small fw-bold">
                                                 <i class="bi bi-hash me-1 text-primary"></i>Quantity
                                             </label>
-                                            <input type="number" name="quantity" id="quantity-{{ $service->id }}" required min="1" value="1" class="form-control form-control-sm" onchange="updatePrice{{ $service->id }}()">
+                                            <input type="number" name="quantity" id="quantity-{{ $service->id }}" required min="1" value="1" class="form-control form-control-sm" onchange="updatePrice{{ $service->id }}()" oninput="updatePrice{{ $service->id }}()">
                                         </div>
                                     </div>
                                     
@@ -397,10 +408,29 @@
                                         
                                         <!-- Price Display -->
                                         <div class="mb-2 p-2 bg-primary bg-opacity-10 rounded border border-primary border-opacity-25">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <h6 class="mb-0 fw-bold text-primary small">Price:</h6>
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="mb-0 fw-bold text-primary small">Total Price:</h6>
                                                 <span class="fw-bold text-primary" id="price-display-{{ $service->id }}">₱{{ number_format($service->price, 2) }}</span>
+                                            </div>
+                                            <!-- Price breakdown -->
+                                            <div class="small text-muted" id="price-breakdown-{{ $service->id }}" style="display: none;">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Material:</span>
+                                                    <span id="material-price-{{ $service->id }}">₱{{ number_format($service->price, 2) }}</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Quantity:</span>
+                                                    <span id="quantity-display-{{ $service->id }}">1</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Request Type:</span>
+                                                    <span id="multiplier-display-{{ $service->id }}">Standard (1x)</span>
+                                                </div>
+                                            </div>
                                                 <input type="hidden" name="calculated_price" id="calculated-price-{{ $service->id }}" value="{{ $service->price }}">
+                                            <div class="small text-muted mt-1">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Price = Material × Quantity × Request Type
                                             </div>
                                         </div>
                                     </div>
@@ -492,10 +522,13 @@
             </div>
         </div>
     </div>
+    @endforeach
     
     <script>
+        // Create updatePrice functions for each service
+        @foreach ($services as $service)
         function updatePrice{{ $service->id }}() {
-            // Get the base price
+            // Get the base price (material price takes precedence if selected)
             const basePrice = {{ $service->price }};
             
             // Get the quantity
@@ -503,46 +536,88 @@
             
             // Get the material price
             const materialSelect = document.getElementById('material-{{ $service->id }}');
-            let materialPrice = 0;
+            let materialPrice = basePrice; // Default to base price
+            let materialName = 'Default';
             if (materialSelect.selectedIndex > 0) {
-                materialPrice = parseFloat(materialSelect.options[materialSelect.selectedIndex].getAttribute('data-price'));
+                materialPrice = parseFloat(materialSelect.options[materialSelect.selectedIndex].getAttribute('data-price')) || basePrice;
+                materialName = materialSelect.options[materialSelect.selectedIndex].text.split(' - ')[0];
             }
             
             // Get the request type multiplier
             let multiplier = 1;
-            document.querySelectorAll('input[name="request_type"]').forEach(radio => {
-                if (radio.checked) {
-                    multiplier = parseFloat(radio.getAttribute('data-multiplier'));
+            let requestTypeName = 'Standard (1x)';
+            const modalElement = document.getElementById('orderModal{{ $service->id }}');
+            const checkedRadio = modalElement.querySelector('input[name="request_type"]:checked');
+            if (checkedRadio) {
+                multiplier = parseFloat(checkedRadio.getAttribute('data-multiplier')) || 1;
+                const radioLabel = modalElement.querySelector(`label[for="${checkedRadio.id}"]`);
+                if (radioLabel) {
+                    requestTypeName = radioLabel.textContent.trim();
                 }
-            });
+            }
             
-            // Calculate the total price
-            const totalPrice = materialPrice * multiplier * quantity;
+            // Calculate the total price: (material price per unit) × quantity × request type multiplier
+            const totalPrice = materialPrice * quantity * multiplier;
             
             // Update the price display
             const priceDisplay = document.getElementById('price-display-{{ $service->id }}');
             priceDisplay.textContent = '₱' + totalPrice.toFixed(2);
             document.getElementById('calculated-price-{{ $service->id }}').value = totalPrice.toFixed(2);
             
-            // Make sure the price is visible
+            // Update breakdown displays
+            const materialPriceDisplay = document.getElementById('material-price-{{ $service->id }}');
+            const quantityDisplay = document.getElementById('quantity-display-{{ $service->id }}');
+            const multiplierDisplay = document.getElementById('multiplier-display-{{ $service->id }}');
+            const breakdownDiv = document.getElementById('price-breakdown-{{ $service->id }}');
+            
+            if (materialPriceDisplay) materialPriceDisplay.textContent = '₱' + materialPrice.toFixed(2);
+            if (quantityDisplay) quantityDisplay.textContent = quantity;
+            if (multiplierDisplay) multiplierDisplay.textContent = requestTypeName;
+            
+            // Show breakdown if material is selected
+            if (breakdownDiv) {
+                if (materialSelect.selectedIndex > 0) {
+                    breakdownDiv.style.display = 'block';
+                } else {
+                    breakdownDiv.style.display = 'none';
+                }
+            }
+            
+            // Style the price display for visibility
             priceDisplay.style.color = '#000000';
             priceDisplay.style.fontWeight = 'bold';
             priceDisplay.style.fontSize = '16px';
+            priceDisplay.style.transition = 'all 0.3s ease';
             
-            // If the price is 0, make it extra obvious that it needs attention
-            if (totalPrice === 0) {
+            // Visual feedback based on price
+            if (totalPrice === 0 || !materialPrice || materialSelect.selectedIndex === 0) {
                 priceDisplay.style.color = '#dc3545';
                 priceDisplay.style.backgroundColor = '#f8d7da';
                 priceDisplay.style.padding = '4px 8px';
                 priceDisplay.style.borderRadius = '4px';
                 priceDisplay.style.border = '1px solid #dc3545';
+                priceDisplay.textContent = 'Please select material';
+                
+                // Hide breakdown when no material selected
+                if (breakdownDiv) {
+                    breakdownDiv.style.display = 'none';
+                }
             } else {
                 priceDisplay.style.color = '#000000';
                 priceDisplay.style.backgroundColor = '#f8f9fa';
                 priceDisplay.style.padding = '4px 8px';
                 priceDisplay.style.borderRadius = '4px';
                 priceDisplay.style.border = '1px solid #007bff';
+                
+                // Add subtle animation to highlight price change
+                priceDisplay.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    priceDisplay.style.transform = 'scale(1)';
+                }, 200);
             }
+            
+            // Show breakdown in console for debugging
+            console.log(`Service {{ $service->id }}: Material=₱${materialPrice}, Qty=${quantity}, Multiplier=${multiplier}, Total=₱${totalPrice.toFixed(2)}`);
         }
         
         function updateFileName{{ $service->id }}(input) {
@@ -580,7 +655,9 @@
             document.getElementById('file-preview-{{ $service->id }}').classList.remove('d-flex');
             document.getElementById('dropzone-content-{{ $service->id }}').classList.remove('d-none');
         }
+        @endforeach
         
+        // Global helper functions
         function handleFileDrop(event, serviceId) {
             event.preventDefault();
             event.stopPropagation();
@@ -593,18 +670,10 @@
             
             if (dt.files.length) {
                 fileInput.files = dt.files;
-                updateFileName{{ $service->id }}(fileInput);
+                // Call the appropriate updateFileName function
+                window[`updateFileName${serviceId}`](fileInput);
             }
         }
-        
-        // Initialize price on load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize price calculation when the modal is opened
-            const modal = document.getElementById('orderModal{{ $service->id }}');
-            modal.addEventListener('shown.bs.modal', function() {
-                updatePrice{{ $service->id }}();
-            });
-        });
         
         function trackFormSubmission(event, serviceId) {
             // Don't interrupt the form submission
@@ -625,8 +694,170 @@
             return true;
         }
         
-        // Check if we need to trigger the order created event when navigating between pages
+        // Real-time service availability updates
+        try {
+            if (window.Echo) {
+                window.Echo.channel('services')
+                    .listen('.service.availability.updated', (event) => {
+                        console.log('Service availability updated:', event);
+                        updateServiceAvailability(event.service);
+                        showServiceUpdateNotification(event.message);
+                    });
+            } else {
+                console.warn('Echo not available - real-time updates disabled');
+            }
+        } catch (error) {
+            console.error('Error setting up real-time service updates:', error);
+        }
+
+        function updateServiceAvailability(service) {
+            // Find the service card
+            const serviceCard = document.querySelector(`[data-service-id="${service.id}"]`);
+            if (!serviceCard) {
+                // If card doesn't exist, reload the page to show updated content
+                console.log('Service card not found, reloading page for updates');
+                setTimeout(() => window.location.reload(), 1000);
+                return;
+            }
+
+            // Update the availability badge
+            const badge = serviceCard.querySelector('.badge');
+            if (badge) {
+                badge.className = service.availability 
+                    ? 'badge bg-success px-3 py-2 rounded-pill' 
+                    : 'badge bg-danger px-3 py-2 rounded-pill';
+                badge.textContent = service.availability ? 'Available' : 'Unavailable';
+            }
+
+            // Update the request button
+            const requestButton = serviceCard.querySelector('.tech-btn');
+            if (requestButton) {
+                requestButton.className = service.availability 
+                    ? 'btn btn-primary w-100 tech-btn' 
+                    : 'btn btn-secondary w-100 tech-btn';
+                requestButton.textContent = service.availability 
+                    ? 'Request Service' 
+                    : 'Currently Unavailable';
+                requestButton.disabled = !service.availability;
+                
+                // Update modal target
+                if (service.availability) {
+                    requestButton.setAttribute('data-bs-toggle', 'modal');
+                    requestButton.setAttribute('data-bs-target', `#orderModal${service.id}`);
+                } else {
+                    requestButton.removeAttribute('data-bs-toggle');
+                    requestButton.removeAttribute('data-bs-target');
+                }
+            }
+
+            // Add visual feedback
+            serviceCard.style.transition = 'all 0.3s ease';
+            serviceCard.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                serviceCard.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function showServiceUpdateNotification(message) {
+            // Create toast notification
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'position-fixed top-0 end-0 p-3';
+            toastContainer.style.zIndex = '1055';
+            
+            toastContainer.innerHTML = `
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-info text-white">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong class="me-auto">Service Update</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                                </div>
+                                <div class="toast-body">
+                        ${message}
+                            </div>
+                        </div>
+                    `;
+                    
+            document.body.appendChild(toastContainer);
+                    
+            // Auto remove after 5 seconds
+                    setTimeout(() => {
+                if (toastContainer.parentElement) {
+                    toastContainer.remove();
+                        }
+                    }, 5000);
+                }
+
+        // Initialize all modals and event handlers
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize price calculation for each service when modals are opened
+            @foreach ($services as $service)
+            const modal{{ $service->id }} = document.getElementById('orderModal{{ $service->id }}');
+            if (modal{{ $service->id }}) {
+                modal{{ $service->id }}.addEventListener('shown.bs.modal', function() {
+                    // Initialize price calculation
+                    updatePrice{{ $service->id }}();
+                    
+                    // Set up event listeners for all price-affecting inputs
+                    const quantityInput = document.getElementById('quantity-{{ $service->id }}');
+                    const materialSelect = document.getElementById('material-{{ $service->id }}');
+                    const requestTypeRadios = document.querySelectorAll('#orderModal{{ $service->id }} input[name="request_type"]');
+                    
+                    // Quantity input event
+                    if (quantityInput) {
+                        quantityInput.addEventListener('input', function() {
+                            updatePrice{{ $service->id }}();
+                        });
+                        quantityInput.addEventListener('change', function() {
+                            updatePrice{{ $service->id }}();
+                        });
+                    }
+                    
+                    // Material select event
+                    if (materialSelect) {
+                        materialSelect.addEventListener('change', function() {
+                            updatePrice{{ $service->id }}();
+                        });
+                    }
+                    
+                    // Request type radio events (already have onchange in HTML)
+                    requestTypeRadios.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            updatePrice{{ $service->id }}();
+                        });
+                    });
+                });
+            }
+    @endforeach
+    
+            // Fix all modals when they are shown
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('shown.bs.modal', function() {
+                    // Get the service ID from the modal ID
+                    const serviceId = modal.id.replace('orderModal', '');
+
+                    // Fix input colors and ensure text is visible
+                    const inputs = modal.querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        input.style.color = '#212529';
+                        input.style.backgroundColor = '#ffffff';
+                    });
+                    
+                    // Make sure price is calculated on modal open
+                    if (window[`updatePrice${serviceId}`]) {
+                        window[`updatePrice${serviceId}`]();
+                    }
+                        });
+                    });
+            
+            // Track form submissions for analytics
+            window.trackFormSubmission = function(event, serviceId) {
+                console.log(`Form for service ${serviceId} submitted`);
+                document.getElementById(`submit-btn-${serviceId}`).disabled = true;
+                document.getElementById(`submit-btn-${serviceId}`).innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+            };
+
+            // Check if we need to trigger the order created event when navigating between pages
             if (localStorage.getItem('order_just_created') === 'true') {
                 // Clear the flag
                 localStorage.removeItem('order_just_created');
@@ -664,140 +895,4 @@
             }
         });
     </script>
-    @endforeach
-    
-    <script>
-        // Initialize event handlers for all modals
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fix all modals when they are shown
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.addEventListener('shown.bs.modal', function() {
-                    // Get the service ID from the modal ID
-                    const serviceId = modal.id.replace('orderModal', '');
-                    
-                    // Fix price display explicitly
-                    const priceDisplay = document.getElementById(`price-display-${serviceId}`);
-                    if (priceDisplay) {
-                        priceDisplay.style.color = '#000000';
-                        priceDisplay.style.fontWeight = 'bold';
-                        priceDisplay.style.fontSize = '16px';
-                        // Add a background to make it more visible
-                        priceDisplay.style.backgroundColor = '#f8f9fa';
-                        priceDisplay.style.padding = '4px 8px';
-                        priceDisplay.style.borderRadius = '4px';
-                        priceDisplay.style.border = '1px solid #007bff';
-                    }
-                    
-                    // Also fix the price label
-                    const priceLabels = modal.querySelectorAll('.text-primary.small');
-                    priceLabels.forEach(label => {
-                        label.style.color = '#000000';
-                        label.style.fontWeight = 'bold';
-                    });
-                    
-                    // Fix the price container
-                    const priceContainer = modal.querySelector('.bg-primary.bg-opacity-10');
-                    if (priceContainer) {
-                        priceContainer.style.backgroundColor = '#f8f9fa';
-                        priceContainer.style.border = '1px solid #007bff';
-                        priceContainer.style.borderRadius = '4px';
-                        priceContainer.style.padding = '8px';
-                    }
-
-                    // Fix input colors and ensure text is visible
-                    const inputs = modal.querySelectorAll('input, select, textarea');
-                    inputs.forEach(input => {
-                        // Ensure text color is visible
-                        input.style.color = '#212529';
-                        input.style.backgroundColor = '#ffffff';
-                        
-                        // Different styling for readonly fields
-                        if (input.readOnly) {
-                            input.style.backgroundColor = '#f8f9fa';
-                        } else {
-                            input.style.border = '1px solid #ced4da';
-                        }
-                        
-                        // Apply specific fix for date inputs which often have visibility issues
-                        if (input.type === 'date') {
-                            input.style.color = '#212529';
-                            input.style.opacity = '1';
-                        }
-                        
-                        // Fix placeholder color
-                        if (input.placeholder) {
-                            // Using a timeout because browsers sometimes overwrite these styles
-                            setTimeout(() => {
-                                const style = document.createElement('style');
-                                style.textContent = `
-                                    #${input.id}::placeholder {
-                                        color: #6c757d !important;
-                                        opacity: 1 !important;
-                                    }
-                                `;
-                                document.head.appendChild(style);
-                            }, 10);
-                        }
-                    });
-                    
-                    // Fix select and option elements
-                    const selects = modal.querySelectorAll('select');
-                    selects.forEach(select => {
-                        select.style.color = '#212529';
-                        Array.from(select.options).forEach(option => {
-                            option.style.color = '#212529';
-                        });
-                    });
-                    
-                    // Fix labels to ensure they're visible
-                    const labels = modal.querySelectorAll('label, .form-check-label');
-                    labels.forEach(label => {
-                        label.style.color = '#212529';
-                        label.style.fontWeight = '500';
-                    });
-                    
-                    // Fix text in the file dropzone
-                    const dropzones = modal.querySelectorAll('.dropzone-container');
-                    dropzones.forEach(dropzone => {
-                        const spans = dropzone.querySelectorAll('span');
-                        spans.forEach(span => {
-                            span.style.color = '#212529';
-                        });
-                    });
-                });
-            });
-            
-            // Handle file dropping for all services
-            window.handleFileDrop = function(event, serviceId) {
-                event.preventDefault();
-                event.stopPropagation();
-                
-                const dt = event.dataTransfer;
-                const files = dt.files;
-                
-                if (files.length > 0) {
-                    const fileInput = document.getElementById(`file-${serviceId}`);
-                    fileInput.files = files;
-                    
-                    // Trigger the change event to update the file display
-                    const changeEvent = new Event('change', { bubbles: true });
-                    fileInput.dispatchEvent(changeEvent);
-                }
-                
-                document.getElementById(`dropzone-${serviceId}`).classList.remove('bg-primary', 'bg-opacity-10');
-            };
-            
-            // Track form submissions for analytics
-            window.trackFormSubmission = function(event, serviceId) {
-                // Add any form submission tracking code here
-                console.log(`Form for service ${serviceId} submitted`);
-                
-                // Disable submit button to prevent double submissions
-                document.getElementById(`submit-btn-${serviceId}`).disabled = true;
-                document.getElementById(`submit-btn-${serviceId}`).innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
-            };
-        });
-    </script>
 </x-app-layout>
-```

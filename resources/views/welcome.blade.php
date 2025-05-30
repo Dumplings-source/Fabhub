@@ -218,7 +218,7 @@
                 <div class="tech-pattern"></div>
                 <div class="relative z-10">
                     <h1 class="text-4xl md:text-5xl font-bold mb-4 text-primary">
-                        Digital Fabrication <br /><span class="text-secondary">Made Accessible</span>
+                        CTU FabLab <br /><span class="text-secondary">Digital Service Hub</span>
                     </h1>
                     <p class="text-lg text-primary mb-8">
                         CTU FabLab offers cutting-edge fabrication services for students,
@@ -250,11 +250,11 @@
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- 3D Printing -->
-                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col">
                     <div class="h-48 overflow-hidden">
                         <img src="https://readdy.ai/api/search-image?query=modern%25203D%2520printer%2520in%2520action%2520creating%2520a%2520detailed%2520prototype%2520with%2520vibrant%2520filament.%2520The%2520machine%2520is%2520shown%2520in%2520a%2520clean%2520workspace%2520with%2520soft%2520lighting%2520highlighting%2520the%2520printing%2520process.%2520The%2520image%2520has%2520a%2520professional%2520technical%2520feel%2520with%2520a%2520simple%2520light%2520background.&width=600&height=400&seq=2&orientation=landscape" alt="3D Printing Service" class="w-full h-full object-cover object-top">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-semibold mb-2 text-primary">3D Printing</h3>
                         <p class="text-primary mb-4">
                             Transform digital designs into physical objects with our
@@ -266,16 +266,18 @@
                                 <p class="text-secondary font-semibold">₱150/hour</p>
                             </div>
                         </div>
-                        <a href="{{ route('service-catalog') }}" class="block bg-primary-light text-primary font-bold px-4 py-2 !rounded-button hover:bg-secondary-yellow hover:text-primary transition whitespace-nowrap text-center border-2 border-primary tech-btn">Request</a>
+                        <div class="mt-auto">
+                            <a href="{{ route('service-catalog') }}" class="block bg-secondary text-secondary-light font-bold px-4 py-3 !rounded-button hover:bg-primary hover:text-secondary-light transition whitespace-nowrap text-center border-2 border-secondary tech-btn">Request</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Laser Cutting -->
-                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col">
                     <div class="h-48 overflow-hidden">
                         <img src="https://readdy.ai/api/search-image?query=professional%2520laser%2520cutting%2520machine%2520precisely%2520cutting%2520a%2520pattern%2520into%2520a%2520sheet%2520of%2520material.%2520The%2520laser%2520beam%2520is%2520visible%2520with%2520a%2520slight%2520glow%2520as%2520it%2520works.%2520The%2520machine%2520is%2520in%2520a%2520clean%2520workspace%2520with%2520soft%2520lighting%2520and%2520a%2520simple%2520light%2520background.&width=600&height=400&seq=3&orientation=landscape" alt="Laser Cutting Service" class="w-full h-full object-cover object-top">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-semibold mb-2 text-primary">Laser Cutting</h3>
                         <p class="text-primary mb-4">
                             Precision cutting and engraving on various materials including
@@ -287,16 +289,18 @@
                                 <p class="text-secondary font-semibold">₱200/hour</p>
                             </div>
                         </div>
-                        <a href="{{ route('service-catalog') }}" class="block bg-secondary text-secondary-light font-bold px-4 py-2 !rounded-button hover:bg-primary transition whitespace-nowrap text-center border-2 border-secondary tech-btn">Request</a>
+                        <div class="mt-auto">
+                            <a href="{{ route('service-catalog') }}" class="block bg-secondary text-secondary-light font-bold px-4 py-3 !rounded-button hover:bg-primary hover:text-secondary-light transition whitespace-nowrap text-center border-2 border-secondary tech-btn">Request</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Woodwork -->
-                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col">
                     <div class="h-48 overflow-hidden">
                         <img src="https://readdy.ai/api/search-image?query=professional%2520woodworking%2520station%2520with%2520CNC%2520router%2520machine%2520carving%2520a%2520detailed%2520pattern%2520into%2520a%2520wooden%2520panel.%2520The%2520workspace%2520is%2520clean%2520with%2520wood%2520shavings%2520visible%2520around%2520the%2520project.%2520The%2520image%2520has%2520warm%2520tones%2520highlighting%2520the%2520natural%2520wood%2520material%2520with%2520a%2520simple%2520light%2520background.&width=600&height=400&seq=4&orientation=landscape" alt="Woodwork Service" class="w-full h-full object-cover object-top">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-semibold mb-2 text-primary">Woodwork</h3>
                         <p class="text-primary mb-4">
                             Custom woodworking services including CNC routing, carving, and
@@ -308,16 +312,18 @@
                                 <p class="text-secondary font-semibold">₱250/hour</p>
                             </div>
                         </div>
-                        <a href="{{ route('service-catalog') }}" class="block bg-primary-light text-primary font-bold px-4 py-2 !rounded-button hover:bg-secondary-yellow hover:text-primary transition whitespace-nowrap text-center border-2 border-primary tech-btn">Request</a>
+                        <div class="mt-auto">
+                            <a href="{{ route('service-catalog') }}" class="block bg-secondary text-secondary-light font-bold px-4 py-3 !rounded-button hover:bg-primary hover:text-secondary-light transition whitespace-nowrap text-center border-2 border-secondary tech-btn">Request</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Embroidery -->
-                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="service-card bg-secondary-light rounded-lg shadow-md overflow-hidden transition-all duration-300 flex flex-col">
                     <div class="h-48 overflow-hidden">
                         <img src="https://readdy.ai/api/search-image?query=modern%2520digital%2520embroidery%2520machine%2520stitching%2520a%2520colorful%2520design%2520onto%2520fabric.%2520The%2520machine%2520is%2520shown%2520mid-process%2520with%2520thread%2520spools%2520visible%2520and%2520a%2520partially%2520completed%2520design.%2520The%2520workspace%2520is%2520clean%2520and%2520well-lit%2520with%2520a%2520simple%2520light%2520background.&width=600&height=400&seq=5&orientation=landscape" alt="Embroidery Service" class="w-full h-full object-cover object-top">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-semibold mb-2 text-primary">Embroidery</h3>
                         <p class="text-primary mb-4">
                             Digital embroidery services for custom designs on clothing,
@@ -329,7 +335,9 @@
                                 <p class="text-secondary font-semibold">₱180/hour</p>
                             </div>
                         </div>
-                        <a href="{{ route('service-catalog') }}" class="block bg-secondary-yellow text-primary font-bold px-4 py-2 !rounded-button hover:bg-primary-light hover:text-primary transition whitespace-nowrap text-center border-2 border-primary tech-btn">Request</a>
+                        <div class="mt-auto">
+                            <a href="{{ route('service-catalog') }}" class="block bg-secondary text-secondary-light font-bold px-4 py-3 !rounded-button hover:bg-primary hover:text-secondary-light transition whitespace-nowrap text-center border-2 border-secondary tech-btn">Request</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -346,20 +354,20 @@
     <div class="section-divider"></div>
 
     <!-- How It Works -->
-    <section class="py-16 bg-primary-light/20 relative">
+    <section class="py-16 bg-primary relative">
         <div class="tech-pattern"></div>
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8 text-primary section-title">How It Works</h2>
-            <p class="text-lg text-primary text-center mb-12 max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8 text-white section-title">How It Works</h2>
+            <p class="text-lg text-white text-center mb-12 max-w-3xl mx-auto">
                 Our streamlined process makes it easy to bring your ideas to life.
             </p>
 
             <div class="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
                 <!-- Step 1 -->
-                <div class="text-center">
+                <div class="text-center bg-white/90 p-6 rounded-lg shadow-md">
                     <div class="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mb-4 mx-auto relative">
                         <i class="ri-user-add-line ri-xl text-primary"></i>
-                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-secondary-light font-bold">
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-secondary-light font-bold">
                             1
                         </div>
                     </div>
@@ -371,7 +379,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="text-center">
+                <div class="text-center bg-white/90 p-6 rounded-lg shadow-md">
                     <div class="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mb-4 mx-auto relative">
                         <i class="ri-upload-cloud-line ri-xl text-primary"></i>
                         <div class="absolute -top-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-secondary-light font-bold">
@@ -385,10 +393,10 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="text-center">
+                <div class="text-center bg-white/90 p-6 rounded-lg shadow-md">
                     <div class="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mb-4 mx-auto relative">
                         <i class="ri-money-dollar-circle-line ri-xl text-primary"></i>
-                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-secondary-yellow rounded-full flex items-center justify-center text-primary font-bold">
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-secondary-light font-bold">
                             3
                         </div>
                     </div>
@@ -399,10 +407,10 @@
                 </div>
 
                 <!-- Step 4 -->
-                <div class="text-center">
+                <div class="text-center bg-white/90 p-6 rounded-lg shadow-md">
                     <div class="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mb-4 mx-auto relative">
                         <i class="ri-truck-line ri-xl text-primary"></i>
-                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-secondary-light font-bold">
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-secondary-light font-bold">
                             4
                         </div>
                     </div>
@@ -437,7 +445,7 @@
                         entrepreneurship in the region.
                     </p>
                 </div>
-                <div class="rounded-lg overflow-hidden shadow-lg">
+                <div class="rounded-lg overflow-hidden">
                     <img src="{{ asset('images/Fablab logo.jpg') }}" alt="CTU FabLab Logo" class="max-w-full h-auto">
                 </div>
             </div>
@@ -447,11 +455,11 @@
     <div class="section-divider"></div>
 
     <!-- Equipment Showcase -->
-    <section id="equipment" class="py-16 bg-primary-light/20 relative">
+    <section id="equipment" class="py-16 bg-primary relative">
         <div class="tech-pattern"></div>
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8 text-primary section-title">Our Equipment</h2>
-            <p class="text-lg text-primary text-center mb-12 max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8 text-white section-title">Our Equipment</h2>
+            <p class="text-lg text-white text-center mb-12 max-w-3xl mx-auto">
                 Explore our cutting-edge fabrication equipment available for your
                 projects.
             </p>
@@ -488,7 +496,7 @@
                 <!-- Equipment 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-primary-light">
                     <div class="h-56 overflow-hidden">
-                        <img src="https://readdy.ai/api/search-image?query=professional%2520Epilog%2520Fusion%2520Pro%252032%2520laser%2520cutter%2520in%2520a%2520clean%2520laboratory%2520environment%2520shown%2520from%2520a%2520slight%2520angle%2520to%2520display%2520its%2520features.%2520The%2520machine%2520has%2520a%2520large%2520cutting%2520bed%2520with%2520the%2520top%2520open%2520to%2520show%2520the%2520interior.%2520The%2520background%2520is%2520simple%2520and%2520clean.&width=500&height=400&seq=8&orientation=landscape" alt="Epilog Fusion Pro 32 Laser Cutter" class="w-full h-full object-cover object-top">
+                      <img src="{{ asset('images/eq2.jpg') }}" alt="Project 19" class="max-w-full h-auto">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2 text-primary">Epilog Fusion Pro 32 Laser Cutter</h3>
@@ -516,8 +524,7 @@
                 <!-- Equipment 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-primary-light">
                     <div class="h-56 overflow-hidden">
-                        <img src="https://readdy.ai/api/search-image?query=professional%2520Shopbot%2520PRSalpha%2520CNC%2520router%2520in%2520a%2520clean%2520workshop%2520environment%2520shown%2520from%2520a%2520slight%2520angle%2520to%2520display%2520its%2520large%2520cutting%2520bed%2520and%2520gantry%2520system.%2520The%2520machine%2520is%2520robust%2520with%2520visible%2520mechanical%2520components.%2520The%2520background%2520is%2520simple%2520and%2520clean.&width=500&height=400&seq=9&orientation=landscape" alt="Shopbot PRSalpha CNC Router" class="w-full h-full object-cover object-top">
-                    </div>
+ <img src="{{ asset('images/eq3.jpg') }}" alt="Project 19" class="max-w-full h-auto">                    </div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2 text-primary">Shopbot PRSalpha CNC Router</h3>
                         <p class="text-primary mb-4">
@@ -543,7 +550,7 @@
             </div>
 
             <div class="mt-12 text-center">
-                <a href="#" class="inline-flex items-center text-secondary font-medium hover:text-primary transition">
+                <a href="#" class="inline-flex items-center text-secondary-light font-medium hover:text-primary-light transition">
                     View all equipment specifications
                     <i class="ri-arrow-right-line ri-sm ml-1"></i>
                 </a>
@@ -606,11 +613,11 @@
     <div class="section-divider"></div>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-16 bg-primary-light/20 relative">
+    <section id="faq" class="py-16 bg-primary relative">
         <div class="tech-pattern"></div>
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8 text-primary section-title">Frequently Asked Questions</h2>
-            <p class="text-lg text-primary text-center mb-12 max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8 text-white section-title">Frequently Asked Questions</h2>
+            <p class="text-lg text-white text-center mb-12 max-w-3xl mx-auto">
                 Find answers to common questions about our services and processes.
             </p>
 
@@ -618,7 +625,7 @@
                 <!-- FAQ Item 1 -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <button class="w-full px-6 py-4 text-left font-semibold flex justify-between items-center focus:outline-none faq-toggle">
-                        <span>How do I place an order for 3D printing?</span>
+                        <span class="text-primary">How do I place an order for 3D printing?</span>
                         <i class="ri-add-line ri-lg text-primary"></i>
                     </button>
                     <div class="px-6 py-4 bg-gray-50 faq-content hidden">
@@ -635,7 +642,7 @@
                 <!-- FAQ Item 2 -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <button class="w-full px-6 py-4 text-left font-semibold flex justify-between items-center focus:outline-none faq-toggle">
-                        <span>What file formats do you accept?</span>
+                        <span class="text-primary">What file formats do you accept?</span>
                         <i class="ri-add-line ri-lg text-primary"></i>
                     </button>
                     <div class="px-6 py-4 bg-gray-50 faq-content hidden">
@@ -654,7 +661,7 @@
                 <!-- FAQ Item 3 -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <button class="w-full px-6 py-4 text-left font-semibold flex justify-between items-center focus:outline-none faq-toggle">
-                        <span>How are prices calculated for services?</span>
+                        <span class="text-primary">How are prices calculated for services?</span>
                         <i class="ri-add-line ri-lg text-primary"></i>
                     </button>
                     <div class="px-6 py-4 bg-gray-50 faq-content hidden">
@@ -673,7 +680,7 @@
                 <!-- FAQ Item 4 -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <button class="w-full px-6 py-4 text-left font-semibold flex justify-between items-center focus:outline-none faq-toggle">
-                        <span>What is the typical turnaround time?</span>
+                        <span class="text-primary">What is the typical turnaround time?</span>
                         <i class="ri-add-line ri-lg text-primary"></i>
                     </button>
                     <div class="px-6 py-4 bg-gray-50 faq-content hidden">
@@ -697,7 +704,7 @@
                 <!-- FAQ Item 5 -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <button class="w-full px-6 py-4 text-left font-semibold flex justify-between items-center focus:outline-none faq-toggle">
-                        <span>Do you offer design assistance?</span>
+                        <span class="text-primary">Do you offer design assistance?</span>
                         <i class="ri-add-line ri-lg text-primary"></i>
                     </button>
                     <div class="px-6 py-4 bg-gray-50 faq-content hidden">
@@ -720,7 +727,7 @@
             </div>
 
             <div class="mt-12 text-center">
-                <a href="#" class="inline-flex items-center text-primary font-medium hover:text-primary/80">
+                <a href="#" class="inline-flex items-center text-secondary-light font-medium hover:text-primary-light transition">
                     View all FAQs
                     <i class="ri-arrow-right-line ri-sm ml-1"></i>
                 </a>
@@ -741,27 +748,27 @@
 
             <div class="grid md:grid-cols-2 gap-12">
                 <div>
-                    <div class="bg-gray-50 rounded-lg p-8 shadow-sm h-full">
-                        <h3 class="text-2xl font-semibold mb-6">Get in Touch</h3>
+                    <div class="bg-primary rounded-lg p-8 shadow-md h-full">
+                        <h3 class="text-2xl font-semibold mb-6 text-white">Get in Touch</h3>
 
                         <form class="space-y-6">
                             <div>
-                                <label for="name" class="block text-gray-700 mb-2">Full Name</label>
+                                <label for="name" class="block text-white mb-2">Full Name</label>
                                 <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded focus:border-primary focus:ring-1 focus:ring-primary">
                             </div>
                             <div>
-                                <label for="email" class="block text-gray-700 mb-2">Email Address</label>
+                                <label for="email" class="block text-white mb-2">Email Address</label>
                                 <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:border-primary focus:ring-1 focus:ring-primary">
                             </div>
                             <div>
-                                <label for="subject" class="block text-gray-700 mb-2">Subject</label>
+                                <label for="subject" class="block text-white mb-2">Subject</label>
                                 <input type="text" id="subject" class="w-full px-4 py-2 border border-gray-300 rounded focus:border-primary focus:ring-1 focus:ring-primary">
                             </div>
                             <div>
-                                <label for="message" class="block text-gray-700 mb-2">Message</label>
+                                <label for="message" class="block text-white mb-2">Message</label>
                                 <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded focus:border-primary focus:ring-1 focus:ring-primary"></textarea>
                             </div>
-                            <button type="submit" class="bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap">
+                            <button type="submit" class="bg-secondary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary-light hover:text-primary transition whitespace-nowrap">
                                 Send Message
                             </button>
                         </form>
@@ -769,17 +776,17 @@
                 </div>
 
                 <div>
-                    <div class="bg-gray-50 rounded-lg p-8 shadow-sm mb-8">
-                        <h3 class="text-2xl font-semibold mb-6">Location & Hours</h3>
+                    <div class="bg-primary rounded-lg p-8 shadow-md mb-8">
+                        <h3 class="text-2xl font-semibold mb-6 text-white">Location & Hours</h3>
 
                         <div class="space-y-4 mb-6">
                             <div class="flex items-start">
-                                <div class="w-10 h-10 flex items-center justify-center text-primary mr-4">
+                                <div class="w-10 h-10 flex items-center justify-center text-primary-light mr-4">
                                     <i class="ri-map-pin-line ri-lg"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-medium">Address</h4>
-                                    <p class="text-gray-600">
+                                    <h4 class="font-medium text-white">Address</h4>
+                                    <p class="text-white/80">
                                         CTU FabLab, Cebu Technological University<br>Danao
                                         Campus, Sabang, Danao City<br>Cebu, Philippines 6004
                                     </p>
@@ -787,12 +794,12 @@
                             </div>
 
                             <div class="flex items-start">
-                                <div class="w-10 h-10 flex items-center justify-center text-primary mr-4">
+                                <div class="w-10 h-10 flex items-center justify-center text-primary-light mr-4">
                                     <i class="ri-time-line ri-lg"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-medium">Operating Hours</h4>
-                                    <p class="text-gray-600">
+                                    <h4 class="font-medium text-white">Operating Hours</h4>
+                                    <p class="text-white/80">
                                         Monday - Friday: 8:00 AM - 5:00 PM<br>Saturday: 9:00 AM
                                         - 12:00 PM<br>Sunday: Closed
                                     </p>
@@ -800,12 +807,12 @@
                             </div>
 
                             <div class="flex items-start">
-                                <div class="w-10 h-10 flex items-center justify-center text-primary mr-4">
+                                <div class="w-10 h-10 flex items-center justify-center text-primary-light mr-4">
                                     <i class="ri-phone-line ri-lg"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-medium">Contact</h4>
-                                    <p class="text-gray-600">
+                                    <h4 class="font-medium text-white">Contact</h4>
+                                    <p class="text-white/80">
                                         Phone: (032) 123-4567<br>Email: fablab@ctu.edu.ph
                                     </p>
                                 </div>
@@ -824,24 +831,24 @@
     <div class="section-divider"></div>
 
     <!-- Newsletter -->
-    <section class="py-16 bg-primary-light/20 relative">
+    <section class="py-16 bg-primary relative">
         <div class="tech-pattern"></div>
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl font-bold mb-8 text-primary section-title">Stay Updated</h2>
-                <p class="text-lg text-primary mb-8">
+                <h2 class="text-3xl font-bold mb-8 text-white section-title">Stay Updated</h2>
+                <p class="text-lg text-white mb-8">
                     Subscribe to our newsletter for the latest updates on services,
                     workshops, and special offers.
                 </p>
 
                 <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
                     <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary">
-                    <button type="submit" class="bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap">
+                    <button type="submit" class="bg-secondary text-secondary-light px-6 py-3 !rounded-button font-medium hover:bg-primary transition whitespace-nowrap">
                         Subscribe
                     </button>
                 </form>
 
-                <p class="text-sm text-gray-500 mt-4">
+                <p class="text-sm text-white/80 mt-4">
                     We respect your privacy. Unsubscribe at any time.
                 </p>
             </div>

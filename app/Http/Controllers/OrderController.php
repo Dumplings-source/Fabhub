@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
@@ -28,6 +33,54 @@ class OrderController extends Controller
         $orders = $query->latest()->paginate($perPage)->appends($request->query());
         
         return view('admin.orders', compact('orders'));
+    }
+
+    public function show(Order $order)
+    {
+        try {
+            \Log::info('OrderController@show called for order ID: ' . $order->id);
+            
+            // Load the related models
+            $order->load(['user', 'service']);
+            
+            // Add file information if file exists
+            if ($order->file_path) {
+                $fullPath = storage_path('app/public/' . $order->file_path);
+                $order->file_exists = file_exists($fullPath);
+                $order->file_size = $order->file_exists ? filesize($fullPath) : 0;
+                $order->file_name = basename($order->file_path);
+                
+                // Determine file type
+                $extension = strtolower(pathinfo($order->file_path, PATHINFO_EXTENSION));
+                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+                $order->is_image = in_array($extension, $imageExtensions);
+                
+                // Add URL information for debugging
+                $order->storage_url = asset('storage/' . $order->file_path);
+                $order->direct_url = url('storage/' . $order->file_path);
+                
+                \Log::info('File info: path=' . $order->file_path . ', exists=' . ($order->file_exists ? 'yes' : 'no') . ', is_image=' . ($order->is_image ? 'yes' : 'no'));
+                \Log::info('Full file path: ' . $fullPath);
+                \Log::info('Storage URL: ' . $order->storage_url);
+                \Log::info('Direct URL: ' . $order->direct_url);
+                \Log::info('APP_URL: ' . config('app.url'));
+            }
+            
+            \Log::info('Order loaded successfully with relationships');
+            
+            return response()->json([
+                'success' => true,
+                'order' => $order
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to fetch order details for order #' . $order->id . ': ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch order details: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function update(Request $request, Order $order)

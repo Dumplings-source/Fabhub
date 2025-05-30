@@ -12,11 +12,11 @@ class Service extends Model
     protected $fillable = [
         'name',
         'rate',
-        'price', // Added price
+        'price',
         'estimated_time',
         'availability',
         'description',
-        'file_formats', // Added file_formats
+        'file_formats',
         'materials',
     ];
 
