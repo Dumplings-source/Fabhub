@@ -5,28 +5,31 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminUserController as Enter;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\Api\OrderController as ApiOrderController;
+use App\Http\Controllers\Api\ServiceController as ApiServiceController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/users', [Enter::class, 'showUserManagement'])->name('admin.users');
-    Route::get('/dashboard', [Enter::class, 'showDashboard'])->name('dashboard');
+    // Changed from AdminUserController to CustomerDashboardController for regular users
+    Route::get('/dashboard', [CustomerDashboardController::class, 'showDashboard'])->name('dashboard');
     Route::get('/service-catalog', [CustomerDashboardController::class, 'showServiceCatalog'])->name('service-catalog');
     Route::post('/service-catalog/{service}/order', [CustomerDashboardController::class, 'createOrder'])->name('service-catalog.order');
-    Route::post('/admin/users', [Enter::class, 'store'])->name('admin.users.store');
-    Route::get('/admin/users/{user}/edit', [Enter::class, 'edit'])->name('admin.users.edit');
-    Route::put('/admin/users/{user}', [Enter::class, 'update'])->name('admin.users.update');
-    Route::delete('/admin/users/{user}', [Enter::class, 'destroy'])->name('admin.users.delete');
     
     // Customer Recent Orders
     Route::get('/recent-orders', [CustomerDashboardController::class, 'showRecentOrders'])->name('recent-orders');
-    
-    // Admin Order Management
-    Route::get('/admin/orders', function () {
-        return view('admin.order-management');
-    })->middleware('auth:admin')->name('admin.orders');
+
+    // Customer Reservations
+    Route::get('/reservations', [ReservationController::class, 'customerIndex'])->name('customer.reservations');
+    Route::post('/reservations', [ReservationController::class, 'store'])->name('customer.reservations.store');
+    Route::patch('/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('customer.reservations.cancel');
+    Route::get('/reservations/time-slots', [ReservationController::class, 'getAvailableTimeSlots'])->name('customer.reservations.time-slots');
+
+    // API Routes for AJAX calls
+    Route::get('/api/services', [ApiServiceController::class, 'index']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -1,197 +1,155 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Recent Orders') }}
-            </h2>
-            <div class="flex items-center">
-                <div class="text-sm text-gray-600">
-                    <a href="/" class="hover:text-primary transition-colors">Home</a> / 
-                    <a href="{{ route('dashboard') }}" class="hover:text-primary transition-colors">Dashboard</a> / 
-                    <span class="font-medium">Recent Orders</span>
-                </div>
-            </div>
-        </div>
-    </x-slot>
-
     <!-- Pusher for real-time updates -->
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
-    <!-- Flash Messages -->
-    @if (session('success'))
-        <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded" role="alert">
-                <p>{{ session('success') }}</p>
+    <div class="container py-4">
+        <!-- Flash Messages -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        </div>
-    @endif
+        @endif
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Navigation Bar -->
-            <div class="bg-white shadow-sm rounded-lg mb-6">
-                <nav class="d-flex p-3 border-bottom" aria-label="Tabs">
-                    <a href="{{ route('dashboard') }}" class="btn fw-semibold me-3 text-secondary border-0">
-                        Dashboard
-                    </a>
-                    <a href="{{ route('service-catalog') }}" class="btn fw-semibold me-3 text-secondary border-0">
-                        Service Catalog
-                    </a>
-                    <a href="{{ route('recent-orders') }}" class="btn fw-semibold me-3 text-primary border-0">
-                        Recent Orders
-                    </a>
-                    <a href="{{ route('dashboard') }}?tab=reservations" class="btn fw-semibold me-3 text-secondary border-0">
-                        Reservations
-                    </a>
-                    <a href="{{ route('dashboard') }}?tab=notifications" class="btn fw-semibold me-3 text-secondary border-0">
-                        Notifications
-                    </a>
-                </nav>
-            </div>
-            
-            <!-- Recent Orders Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900">My Orders</h3>
-                        <div class="text-sm text-gray-500">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+        <!-- Recent Orders Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-secondary border-0 shadow position-relative mb-4">
+                    <div class="tech-pattern"></div>
+                    <div class="card-body p-4 position-relative">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="text-warning section-title mb-0">My Orders</h2>
+                            <span class="badge bg-warning text-primary rounded-pill px-3 py-2">
                                 {{ $orders->count() }} {{ Str::plural('order', $orders->count()) }}
                             </span>
                         </div>
-                    </div>
-                    
-                    @if($orders->isEmpty())
-                        <div class="text-center py-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                            </svg>
-                            <p class="text-gray-500 text-sm">No orders yet</p>
-                            <a href="{{ route('service-catalog') }}" class="mt-2 inline-block text-sm text-blue-600 hover:text-blue-800">
-                                Browse services to place an order
-                            </a>
-                        </div>
-                    @else
-                        <!-- Desktop Table View -->
-                        <div class="hidden md:block overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Material</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preferred Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($orders as $order)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#{{ $order->id }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->service->name }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->material }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->quantity }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">{{ \Carbon\Carbon::parse($order->preferred_date)->format('M d, Y') }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-3 py-1 text-xs font-medium rounded-full 
-                                                    {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                    {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                    {{ $order->status === 'completed' ? 'bg-green-100 text-green-800' : '' }}
-                                                    {{ $order->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
-                                                ">
-                                                    {{ ucfirst($order->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->created_at->format('M d, Y') }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
                         
-                        <!-- Mobile Card View -->
-                        <div class="md:hidden space-y-4">
-                            @foreach($orders as $order)
-                                <div class="border border-gray-200 rounded-lg shadow-sm mb-4 overflow-hidden">
-                                    <div class="flex justify-between items-center bg-gray-50 px-4 py-3 border-b border-gray-200">
-                                        <div>
-                                            <span class="text-sm font-medium">Order #{{ $order->id }}</span>
-                                            <span class="text-xs text-gray-500 ml-2">{{ $order->created_at->format('M d, Y') }}</span>
+                        @if($orders->isEmpty())
+                            <div class="text-center py-5">
+                                <i class="bi bi-box-seam fs-1 text-light opacity-50 mb-3"></i>
+                                <p class="text-light mb-2">No orders yet</p>
+                                <a href="{{ route('service-catalog') }}" class="btn btn-warning btn-sm text-primary">
+                                    Browse services to place an order
+                                </a>
+                            </div>
+                        @else
+                            <!-- Desktop Table View -->
+                            <div class="table-responsive d-none d-md-block">
+                                <table class="table table-dark table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Service</th>
+                                            <th>Material</th>
+                                            <th>Quantity</th>
+                                            <th>Preferred Date</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($orders as $order)
+                                            <tr>
+                                                <td class="fw-medium">#{{ $order->id }}</td>
+                                                <td>{{ $order->service->name }}</td>
+                                                <td>{{ $order->material }}</td>
+                                                <td>{{ $order->quantity }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($order->preferred_date)->format('M d, Y') }}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill 
+                                                        {{ $order->status === 'pending' ? 'bg-warning text-primary' : '' }}
+                                                        {{ $order->status === 'processing' ? 'bg-info text-dark' : '' }}
+                                                        {{ $order->status === 'completed' ? 'bg-success' : '' }}
+                                                        {{ $order->status === 'cancelled' ? 'bg-danger' : '' }}
+                                                    ">
+                                                        {{ ucfirst($order->status) }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Mobile Card View -->
+                            <div class="d-md-none">
+                                @foreach($orders as $order)
+                                    <div class="card bg-light mb-3 border-0 shadow-sm">
+                                        <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="text-light fw-medium">Order #{{ $order->id }}</span>
+                                                <small class="text-light opacity-75 ms-2">{{ $order->created_at->format('M d, Y') }}</small>
+                                            </div>
+                                            <span class="badge rounded-pill 
+                                                {{ $order->status === 'pending' ? 'bg-warning text-primary' : '' }}
+                                                {{ $order->status === 'processing' ? 'bg-info text-dark' : '' }}
+                                                {{ $order->status === 'completed' ? 'bg-success' : '' }}
+                                                {{ $order->status === 'cancelled' ? 'bg-danger' : '' }}
+                                            ">
+                                                {{ ucfirst($order->status) }}
+                                            </span>
                                         </div>
-                                        <span class="px-3 py-1 text-xs font-medium rounded-full 
-                                            {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                            {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
-                                            {{ $order->status === 'completed' ? 'bg-green-100 text-green-800' : '' }}
-                                            {{ $order->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
-                                        ">
-                                            {{ ucfirst($order->status) }}
-                                        </span>
-                                    </div>
-                                    <div class="p-4">
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div class="flex flex-col">
-                                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Service</span>
-                                                <span class="text-sm font-medium text-gray-900 mt-1">{{ $order->service->name }}</span>
-                                            </div>
-                                            <div class="flex flex-col">
-                                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Material</span>
-                                                <span class="text-sm font-medium text-gray-900 mt-1">{{ $order->material }}</span>
-                                            </div>
-                                            <div class="flex flex-col">
-                                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</span>
-                                                <span class="text-sm font-medium text-gray-900 mt-1">{{ $order->quantity }}</span>
-                                            </div>
-                                            <div class="flex flex-col">
-                                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Preferred Date</span>
-                                                <span class="text-sm font-medium text-gray-900 mt-1">{{ \Carbon\Carbon::parse($order->preferred_date)->format('M d, Y') }}</span>
-                                            </div>
-                                        </div>
-                                        
-                                        @if($order->status === 'processing')
-                                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                                <div class="flex items-start space-x-3 mb-3">
-                                                    <div class="h-6 w-6 text-white rounded-full flex items-center justify-center flex-shrink-0 bg-green-500">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">Order Accepted</p>
-                                                        <p class="text-xs text-gray-500">Your order has been accepted and is being processed</p>
-                                                    </div>
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <h6 class="text-muted small text-uppercase mb-1">Service</h6>
+                                                    <p class="fw-medium mb-0">{{ $order->service->name }}</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="text-muted small text-uppercase mb-1">Material</h6>
+                                                    <p class="fw-medium mb-0">{{ $order->material }}</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="text-muted small text-uppercase mb-1">Quantity</h6>
+                                                    <p class="fw-medium mb-0">{{ $order->quantity }}</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="text-muted small text-uppercase mb-1">Preferred Date</h6>
+                                                    <p class="fw-medium mb-0">{{ \Carbon\Carbon::parse($order->preferred_date)->format('M d, Y') }}</p>
                                                 </div>
                                             </div>
-                                        @endif
-                                        
-                                        @if($order->status === 'completed')
-                                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                                <div class="flex items-start space-x-3 mb-3">
-                                                    <div class="h-6 w-6 text-white rounded-full flex items-center justify-center flex-shrink-0 bg-green-500">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-sm font-medium text-gray-900">Order Completed</p>
-                                                        <p class="text-xs text-gray-500">Your order has been completed and is ready for pickup</p>
+                                            
+                                            @if($order->status === 'processing')
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="bg-secondary rounded-circle p-1 me-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                                                            <i class="bi bi-check text-light small"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p class="fw-medium mb-0">Order Accepted</p>
+                                                            <p class="text-muted small">Your order has been accepted and is being processed</p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        
-                                        @if($order->notes)
-                                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</span>
-                                                <p class="text-sm text-gray-700 mt-1">{{ $order->notes }}</p>
-                                            </div>
-                                        @endif
+                                            @endif
+                                            
+                                            @if($order->status === 'completed')
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="bg-success rounded-circle p-1 me-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                                                            <i class="bi bi-check-lg text-light small"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p class="fw-medium mb-0">Order Completed</p>
+                                                            <p class="text-muted small">Your order has been completed and is ready for pickup</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            
+                                            @if($order->notes)
+                                                <div class="mt-3 pt-3 border-top">
+                                                    <h6 class="text-muted small text-uppercase mb-1">Notes</h6>
+                                                    <p class="mb-0">{{ $order->notes }}</p>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -222,43 +180,47 @@
     
     // Show toast notification
     function showToastNotification(data) {
-        // Create a toast element
-        const toast = document.createElement('div');
-        toast.className = 'fixed top-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg z-50';
-        
         // Determine the icon based on status
-        let statusIcon = '';
+        let statusIcon = 'bi-info-circle';
+        let bgClass = 'bg-primary';
+        
         if (data.order.status === 'processing') {
-            statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+            statusIcon = 'bi-arrow-clockwise';
+            bgClass = 'bg-info';
         } else if (data.order.status === 'completed') {
-            statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>';
+            statusIcon = 'bi-check-circle';
+            bgClass = 'bg-success';
         } else if (data.order.status === 'cancelled') {
-            statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+            statusIcon = 'bi-x-circle';
+            bgClass = 'bg-danger';
         }
         
-        // Set the toast content
-        toast.innerHTML = `
-            <div class="flex items-center">
-                ${statusIcon}
-                <div>
-                    <p class="font-medium">${data.message}</p>
-                    <p class="text-sm opacity-90">Order #${data.order.id} for ${data.order.service.name}</p>
+        // Create toast HTML
+        const toastHTML = `
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+                <div class="toast show ${bgClass} text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header ${bgClass} text-white">
+                        <i class="bi ${statusIcon} me-2"></i>
+                        <strong class="me-auto">Order Update</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        <p class="mb-0">${data.message}</p>
+                        <p class="small mb-0">Order #${data.order.id} for ${data.order.service.name}</p>
+                    </div>
                 </div>
             </div>
-            <button onclick="this.parentElement.remove()" class="absolute top-1 right-1 text-white hover:text-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         `;
         
-        // Add the toast to the page
-        document.body.appendChild(toast);
+        // Add the toast to the document
+        document.body.insertAdjacentHTML('beforeend', toastHTML);
         
         // Remove the toast after 5 seconds
         setTimeout(() => {
-            toast.style.opacity = 0;
-            setTimeout(() => toast.remove(), 300);
+            const toast = document.querySelector('.toast');
+            if (toast) {
+                toast.remove();
+            }
         }, 5000);
     }
 </script> 

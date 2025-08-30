@@ -12,11 +12,11 @@ class Service extends Model
     protected $fillable = [
         'name',
         'rate',
-        'price', // Added price
+        'price',
         'estimated_time',
         'availability',
         'description',
-        'file_formats', // Added file_formats
+        'file_formats',
         'materials',
     ];
 
@@ -27,5 +27,21 @@ class Service extends Model
     public function timeSlots()
     {
         return $this->hasMany(TimeSlot::class);
+    }
+    
+    public function materialPrices()
+    {
+        return $this->hasMany(MaterialPrice::class);
+    }
+    
+    public function getMaterialsArray()
+    {
+        return array_map('trim', explode(',', $this->materials));
+    }
+    
+    public function getMaterialPrice($materialName)
+    {
+        $materialPrice = $this->materialPrices()->where('material_name', $materialName)->first();
+        return $materialPrice ? $materialPrice->price : $this->price; // Default to service price if no specific price
     }
 }

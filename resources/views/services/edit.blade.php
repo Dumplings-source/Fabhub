@@ -7,13 +7,13 @@
             <p>You do not have permission to view this page.</p>
         </div>
     @else
-        <div class="bg-white shadow rounded-lg p-6 m-6">
+        <div class="bg-white shadow rounded-lg p-6 m-6 border-2 border-black">
             <h2 class="text-2xl font-semibold mb-6">Edit Service</h2>
 
             <form method="POST" action="{{ route('services.update', $service->id) }}">
                 @csrf
                 @method('PUT')
-                <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 gap-4 border-black">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Service Name</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $service->name) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>

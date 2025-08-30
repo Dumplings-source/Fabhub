@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Order;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -12,13 +13,17 @@ class CustomerDashboardController extends Controller
 {
     public function showDashboard()
     {
+        // Skip activity logging completely to avoid foreign key issues
+        // Set the dashboard visited flag to prevent future attempts
+        session(['dashboard_visited' => true]);
+        
         return view('dashboard');
     }
 
     public function showServiceCatalog(Request $request)
     {
         $perPage = $request->input('per_page', 6);
-        $services = Service::paginate($perPage);
+        $services = Service::with('materialPrices')->paginate($perPage);
         
         // Load time slots for each service
         foreach ($services as $service) {
@@ -55,6 +60,8 @@ class CustomerDashboardController extends Controller
             'file_path' => $filePath,
             'notes' => $request->input('notes', ''), // Optional notes field
         ]);
+
+        // Activity logging removed
 
         // Notify admin about new order
         try {
@@ -107,6 +114,30 @@ class CustomerDashboardController extends Controller
         return response()->json($orders);
     }
 
+    public function getOrderCounts()
+    {
+        $userId = Auth::id();
+        
+        // Get counts directly from the database for better performance
+        $pending = Order::where('user_id', $userId)
+            ->where('status', 'pending')
+            ->count();
+            
+        $processing = Order::where('user_id', $userId)
+            ->where('status', 'processing')
+            ->count();
+            
+        $completed = Order::where('user_id', $userId)
+            ->where('status', 'completed')
+            ->count();
+        
+        return response()->json([
+            'active' => $processing,
+            'completed' => $completed,
+            'pending' => $pending
+        ]);
+    }
+
     public function createOrderApi(Request $request)
     {
         $validated = $request->validate([
@@ -130,6 +161,8 @@ class CustomerDashboardController extends Controller
             'file_path' => $filePath,
             'notes' => $validated['notes'] ?? '', // Use empty string if notes is not provided
         ]);
+
+        // We'll skip activity logging here to avoid foreign key issues
 
         try {
             $admin = \App\Models\Admin::first();
